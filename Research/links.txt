@@ -1,3 +1,10 @@
-For help learning Git commands 
-
+GIT TUTORIALS
 https://www.atlassian.com/git/tutorials/
+
+
+GOOGLE MAPS API
+https://developers.google.com/maps/
+
+SWIFT TUTORIALS (iOS DEV)
+http://www.skilledup.com/articles/6-best-free-swift-tutorials-programming-new-language/
+http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start
