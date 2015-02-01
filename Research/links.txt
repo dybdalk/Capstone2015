@@ -8,3 +8,6 @@ https://developers.google.com/maps/
 SWIFT TUTORIALS (iOS DEV)
 http://www.skilledup.com/articles/6-best-free-swift-tutorials-programming-new-language/
 http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start
+
+GOOGLE DIRECTIONS API (seems very relevant)
+https://developers.google.com/maps/documentation/directions/
