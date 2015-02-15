@@ -70,6 +70,12 @@ class RouteMatcher
 	//Calculate crow flies distance between points using the Haversine distance formula.
 	private static double score(Route n, Route m)
 	{
+		return Math.abs(startScore(n,m))+Math.abs(endScore(n,m));
+	}
+
+	//see how far apart the start points are (in km)
+	private static double startScore(Route n, Route m)
+	{
 		double R = 6372.8;
 		//start point stuff
 		// System.out.println("n.slat: "+n.getslat()+"\t m.slat: "+m.getslat());
@@ -82,8 +88,14 @@ class RouteMatcher
 		//System.out.println("nslat: "+nslat+"\t mslat: "+mslat);
 		double a = Math.sin(dsLat / 2) * Math.sin(dsLat / 2) + Math.sin(dsLon / 2) * Math.sin(dsLon / 2) * Math.cos(nslat) * Math.cos(mslat);
 		double c = 2 * Math.asin(Math.sqrt(a));
+		return R*c;
+	}
 
+	//see how far apart the endpoints are (in km)
+	private static double endScore(Route n, Route m)
+	{
 		//end point stuff
+		double R = 6372.8;
 		double deLat = Math.toRadians(m.elat - n.elat);
 		double deLon = Math.toRadians(m.elong - n.elong);
 		Double nelat = Math.toRadians(n.getelat());
@@ -91,7 +103,7 @@ class RouteMatcher
 		double b = Math.sin(dsLat / 2) * Math.sin(deLat / 2) + Math.sin(deLon / 2) * Math.sin(deLon / 2) * Math.cos(nelat) * Math.cos(melat);
 		double d = 2 * Math.asin(Math.sqrt(b));
 
-		return Math.abs(c)+Math.abs(d);
+		return R*d;
 	}
 
 	  /////////////////////////////////////////////////////////////////////////////////////////////////
