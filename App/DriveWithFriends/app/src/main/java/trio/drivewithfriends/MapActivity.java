@@ -19,13 +19,16 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 import java.util.Locale;
 
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerDragListener {
 
     private MapFragment mapFragment;
     private GoogleMap myMap;
@@ -48,6 +51,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         workAddress = intent.getStringExtra(MainActivity.END_LOCATION);
         homeAddress = intent.getStringExtra(MainActivity.START_LOCATION);
+
 
         mLatLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
@@ -81,10 +85,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             work = new LatLng(workAd.getLatitude(),workAd.getLongitude());
             myMap.addMarker(new MarkerOptions()
                     .position(home)
+                    .draggable(true)
                     .title("Home"));
 
             myMap.addMarker(new MarkerOptions()
                     .position(work)
+                    .draggable(true)
                     .title("Work"));
 
             // Set the camera to the greatest possible zoom level that includes
@@ -111,4 +117,24 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        LatLng location = marker.getPosition();
+        if (0 == marker.getTitle().compareTo("Work")) {
+            work = location;
+        }
+        else if (0 == marker.getTitle().compareTo("Home")) {
+            home = location;
+        }
+    }
 }
