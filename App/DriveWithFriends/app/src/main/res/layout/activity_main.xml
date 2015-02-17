@@ -1,17 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
-    <EditText android:id="@+id/edit_message"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+
+    <EditText
+        android:id="@+id/edit_message"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_name" />
+    <EditText
+        android:id="@+id/edit_start_location"
+        android:layout_below="@id/edit_message"
+        android:layout_centerVertical="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_start_address" />
+    <EditText
+        android:id="@+id/edit_end_location"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/edit_start_location"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_end_address" />
+
     <Button
+        android:id="@+id/to_route_button"
         android:layout_width="wrap_content"
+        android:layout_below="@id/edit_end_location"
         android:layout_height="wrap_content"
         android:text="@string/to_route"
         android:nestedScrollingEnabled="true"
         android:onClick="buttonToRouteTouch" />
-</LinearLayout>
+    <Button
+        android:id="@+id/to_map_button"
+        android:layout_below="@id/to_route_button"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/to_map"
+        android:nestedScrollingEnabled="true"
+        android:onClick="buttonToMapTouch" />
+    <TextView android:text="location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location"
+        android:layout_alignParentBottom="true"
+        android:textSize="15dp"
+        android:layout_centerHorizontal="true"
+        android:textIsSelectable="true"  />
+</RelativeLayout>
