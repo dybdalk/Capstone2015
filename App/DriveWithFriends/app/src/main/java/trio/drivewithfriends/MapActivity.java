@@ -52,8 +52,15 @@ public class MapActivity extends FragmentActivity implements
         workAddress = intent.getStringExtra(MainActivity.END_LOCATION);
         homeAddress = intent.getStringExtra(MainActivity.START_LOCATION);
 
-
         mLatLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+
+        if (0 == workAddress.compareTo("")) {
+            work = new LatLng(mLatLng.latitude + .001, mLatLng.longitude + .001);
+        }
+
+        if (0 == homeAddress.compareTo("")) {
+            home = mLatLng;
+        }
 
         // create map
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -72,17 +79,18 @@ public class MapActivity extends FragmentActivity implements
     public void placeMarkers(){
         try {
             Geocoder geocoder = new Geocoder(this);
-            if (homeAddress == "" || workAddress == "" ){
-                System.out.println("null address(es)!");
-            }
             System.out.println("Home: " + homeAddress );
             System.out.println("Work: " + workAddress);
             List<Address> homeAddresses = geocoder.getFromLocationName(homeAddress, 1);
             List<Address> workAddresses = geocoder.getFromLocationName(workAddress, 1);
-            Address homeAd = homeAddresses.get(0);
-            Address workAd = workAddresses.get(0);
-            home = new LatLng(homeAd.getLatitude(),homeAd.getLongitude());
-            work = new LatLng(workAd.getLatitude(),workAd.getLongitude());
+            if (!homeAddresses.isEmpty()) {
+                Address homeAd = homeAddresses.get(0);
+                home = new LatLng(homeAd.getLatitude(), homeAd.getLongitude());
+            }
+            if (!workAddresses.isEmpty()) {
+                Address workAd = workAddresses.get(0);
+                work = new LatLng(workAd.getLatitude(), workAd.getLongitude());
+            }
             myMap.addMarker(new MarkerOptions()
                     .position(home)
                     .draggable(true)
