@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DriveWithFriends</string>
+    <string name="to_route">Track Route</string>
+    <string name="to_map">Add Route</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_start_address">Start Address</string>
+    <string name="enter_end_address">End Address</string>
+    <string name="username">username</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_route">RouteActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
