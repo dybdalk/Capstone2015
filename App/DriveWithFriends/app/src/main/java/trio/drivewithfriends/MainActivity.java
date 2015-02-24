@@ -22,14 +22,32 @@ import java.util.Date;
 public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.
         OnConnectionFailedListener {
+
+    // All these public final static values are keys that are
+    // used when passing messages between activities. The idea
+    // is that these messages are read from input by the user
+    // and passed to the next activity.
+
+    // EXTRA_MESSAGE is used to pass the username to RouteActivity
     public final static String EXTRA_MESSAGE = "trio.drivewithfriends.MESSAGE";
+
+    // MY_LAT and MY_LNG pass current location to MapActivity
     public final static String MY_LAT = "trio.drivewithfriends.MY_LAT";
     public final static String MY_LNG = "trio.drivewithfriends.MY_LNG";
+
+    // Pass start and end location to MapActivity. The user inputs these locations
+    // as addresses and we use Geocoding to get GPS coordinates. Addresses can be
+    // literal address or just names, i,e, "Tacoma, Wa".
     public final static String START_LOCATION = "trio.drivewithfriends.START_LOCATION";
     public final static String END_LOCATION = "trio.drivewithfriends.END_LOCATION";
+
+    // Current Location
     private Location mLastLocation;
+    // Api client for getting location information.
     private GoogleApiClient mGoogleApiClient;
+    // Current Location in LatLng
     private LatLng my_location;
+    // textView of current location
     private TextView mTextLocation;
 
     @Override
@@ -62,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+    // create google api client
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -69,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements
                 .addApi(LocationServices.API)
                 .build();
     }
-
+    // when googla api client connects
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
@@ -77,7 +96,9 @@ public class MainActivity extends ActionBarActivity implements
         updateUI();
     }
 
-    // What we do will buttons
+    // What we do with buttons:
+    //
+    // Start RouteActivity and send username as message
     public void buttonToRouteTouch(View view) {
         Intent intent = new Intent(this, RouteActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
@@ -85,6 +106,8 @@ public class MainActivity extends ActionBarActivity implements
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+    // Start MapActivity and send route and location
+    // information as messages.
     public void buttonToMapTouch(View view) {
         Intent intent = new Intent(this, MapActivity.class);
 

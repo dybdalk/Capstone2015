@@ -1,18 +1,13 @@
 package trio.drivewithfriends;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -23,7 +18,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
-import java.util.Locale;
 
 
 public class MapActivity extends FragmentActivity implements
@@ -32,32 +26,31 @@ public class MapActivity extends FragmentActivity implements
 
     private MapFragment mapFragment;
     private GoogleMap myMap;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    private LatLng mLatLng;
-    private String workAddress;
-    private String homeAddress;
-    private LatLng home;
-    private LatLng work;
+    private LatLng mLatLng; // current location
+    private String workAddress; // end address as string
+    private String homeAddress; // start address as string
+    private LatLng home; // GPS of home
+    private LatLng work; // GPS of work
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         // get location
         Intent intent = getIntent();
         String lat = intent.getStringExtra(MainActivity.MY_LAT);
         String lng = intent.getStringExtra(MainActivity.MY_LNG);
+        mLatLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
+        // get route addresses
         workAddress = intent.getStringExtra(MainActivity.END_LOCATION);
         homeAddress = intent.getStringExtra(MainActivity.START_LOCATION);
 
-        mLatLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-
+        // handle missing input from user.
         if (0 == workAddress.compareTo("")) {
             work = new LatLng(mLatLng.latitude + .001, mLatLng.longitude + .001);
         }
-
         if (0 == homeAddress.compareTo("")) {
             home = mLatLng;
         }
@@ -65,19 +58,20 @@ public class MapActivity extends FragmentActivity implements
         // create map
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
     @Override
+    // called when map is ready for use
     public void onMapReady(GoogleMap map) {
         myMap=map;
-//        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 8));
         placeMarkers();
     }
 
+    // place markers for work and home, as well
+    // as zoom camera appropriately
     public void placeMarkers(){
         try {
+            // here we convert string addresses to GPS coordinates
             Geocoder geocoder = new Geocoder(this);
             System.out.println("Home: " + homeAddress );
             System.out.println("Work: " + workAddress);
@@ -91,23 +85,24 @@ public class MapActivity extends FragmentActivity implements
                 Address workAd = workAddresses.get(0);
                 work = new LatLng(workAd.getLatitude(), workAd.getLongitude());
             }
+            // place markers for home and work
             myMap.addMarker(new MarkerOptions()
                     .position(home)
                     .draggable(true)
                     .title("Home"));
-
             myMap.addMarker(new MarkerOptions()
                     .position(work)
                     .draggable(true)
                     .title("Work"));
 
-            // Set the camera to the greatest possible zoom level that includes
-            // home and work
-            // myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 4));
-
+            // Here, i've dealt with a weird race-condition between the
+            // map itself and what I think is the representation of the map
+            // on our screen. To solve this, we just wait for the map to be
+            // completely loaded onto phone.
             myMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
                 public void onMapLoaded() {
+                    // zoom to include both markers
                     LatLngBounds.Builder myBoundsBuilder = new LatLngBounds.Builder();
                     myBoundsBuilder = myBoundsBuilder.include(home); myBoundsBuilder = myBoundsBuilder.include(work);
                     LatLngBounds myBounds = myBoundsBuilder.build();
@@ -117,11 +112,9 @@ public class MapActivity extends FragmentActivity implements
             });
         }
         catch(Exception e) {
+            // poor exception handling
             System.out.println("caought!");
             System.out.println(e.getMessage());
-  //          LatLng ll = new LatLng(0,0);
-  //          myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, 4));
-
         }
     }
 
@@ -137,6 +130,8 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
+        // updates route gps information when user drags
+        // markers.
         LatLng location = marker.getPosition();
         if (0 == marker.getTitle().compareTo("Work")) {
             work = location;

@@ -18,6 +18,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.util.Date;
 
+// Route Activity gets phone's location every 10 seconds or so
+// and prints GPS coordinates to screen.
 public class RouteActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.
         OnConnectionFailedListener, LocationListener {
@@ -46,7 +48,7 @@ public class RouteActivity extends ActionBarActivity implements
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-        // update text view object with message
+        // update text view object with username
         TextView textView = (TextView) findViewById(R.id.username);
         textView.setText(message);
 
@@ -63,6 +65,8 @@ public class RouteActivity extends ActionBarActivity implements
     //Build the google api client, needed for access to location information
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
+                // listeners for when connection is made to
+                // (google server?) via the GoogleApiClient
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -71,6 +75,8 @@ public class RouteActivity extends ActionBarActivity implements
 
 
     protected void createLocationRequest() {
+        // Creates automated requests for location
+        // to the google api client.
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
@@ -79,12 +85,14 @@ public class RouteActivity extends ActionBarActivity implements
 
     @Override
     protected void onStart() {
+        // on activity start
         super.onStart();
         mGoogleApiClient.connect();
     }
 
     @Override
     protected void onResume() {
+        // on activity resume
         super.onResume();
         if (mGoogleApiClient.isConnected()) {
         startLocationUpdates();
@@ -92,13 +100,14 @@ public class RouteActivity extends ActionBarActivity implements
     }
 
     @Override
-    // when user leaves activity?
+    // when user leaves activity
     protected void onPause() {
         super.onPause();
         stopLocationUpdates();
     }
 
     @Override
+    // when activity is terminated.
     protected void onStop() {
         super.onStop();
         if (mGoogleApiClient.isConnected())
@@ -147,10 +156,12 @@ public class RouteActivity extends ActionBarActivity implements
         Toast.makeText(this, "Connection Failed", Toast.LENGTH_SHORT).show();
     }
 
+    // starts the automated requests for location
     protected void startLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
+    // ends the automated requests for location
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, RouteActivity.this);
