@@ -9,8 +9,14 @@ SWIFT TUTORIALS (iOS DEV)
 http://www.skilledup.com/articles/6-best-free-swift-tutorials-programming-new-language/
 http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start
 
+How to snap marker to nearest rode (super clever)
+http://econym.org.uk/gmap/snap.htm
+
+Using autocomplete on user input of locations.
+https://ddewaele.github.io/GoogleMapsV2WithActionBarSherlock/part5
 
 Sample JSON object for google route information:
 developers.google.com/maps/documentation/directions/#sample-response
+
 GOOGLE DIRECTIONS API (seems very relevant)
 https://developers.google.com/maps/documentation/directionS/

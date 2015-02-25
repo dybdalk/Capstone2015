@@ -1,10 +1,13 @@
 package trio.drivewithfriends;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,12 +20,30 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.net.ssl.HttpsURLConnection;
+
+//
+//
+// TODO
+// - move network access off UI thread, this is standard practice
+// - draw route on map and have user manipulate route,
 
 public class MapActivity extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener {
+    private static String ANDROID_API_KEY;
+    private static String BROWSER_API_KEY;
 
     private MapFragment mapFragment;
     private GoogleMap myMap;
@@ -32,10 +53,22 @@ public class MapActivity extends FragmentActivity implements
     private LatLng home; // GPS of home
     private LatLng work; // GPS of work
 
+    private String routeJSON;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        // set api keys
+        Resources res = getResources();
+        BROWSER_API_KEY = res.getString(R.string.browser_api_key);
+        ANDROID_API_KEY = res.getString(R.string.android_api_key);
+
+        // give proper permissions
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         // get location
         Intent intent = getIntent();
@@ -64,6 +97,7 @@ public class MapActivity extends FragmentActivity implements
     // called when map is ready for use
     public void onMapReady(GoogleMap map) {
         myMap=map;
+        myMap.setOnMarkerDragListener(this);
         placeMarkers();
     }
 
@@ -130,6 +164,7 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
+        System.out.println("end drag");
         // updates route gps information when user drags
         // markers.
         LatLng location = marker.getPosition();
@@ -139,5 +174,49 @@ public class MapActivity extends FragmentActivity implements
         else if (0 == marker.getTitle().compareTo("Home")) {
             home = location;
         }
+
+
+        String url = "https://maps.googleapis.com/maps/api/directions/json?";
+        url = url + "origin=" + home.latitude + "," + home.longitude;
+        url = url + "&destination=" + work.latitude + "," + work.longitude;
+        url = url + "&key=" + BROWSER_API_KEY;
+        System.out.println(url);
+        routeJSON = getJSON(url, 100000);
+        System.out.println(routeJSON);
+    }
+    private String getJSON(String url, int timeout) {
+        try {
+            URL u = new URL(url);
+            HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+            c.setRequestMethod("GET");
+            c.setRequestProperty("Content-length", "0");
+            c.setUseCaches(false);
+            c.setAllowUserInteraction(false);
+            c.setConnectTimeout(timeout);
+            c.setReadTimeout(timeout);
+            c.connect();
+            int status = c.getResponseCode();
+
+            switch (status) {
+                case 200:
+                case 201:
+                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line+"\n");
+                    }
+                    br.close();
+                    return sb.toString();
+            }
+
+        } catch (MalformedURLException ex) {
+            System.out.println("MalformedURLException in HTML request");
+            //Logger.getLogger(DebugServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            System.out.println("IOException in HTML request");
+            //Logger.getLogger(DebugServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
