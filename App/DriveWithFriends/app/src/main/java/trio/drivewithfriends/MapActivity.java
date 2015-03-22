@@ -36,8 +36,11 @@ import javax.net.ssl.HttpsURLConnection;
 //
 //
 // TODO
+// - Get marker placement information from json in our ConfigureRoute thread
 // - move network access off UI thread, this is standard practice
+//      http://developer.android.com/reference/android/os/AsyncTask.html
 // - draw route on map and have user manipulate route,
+//     http://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
 
 public class MapActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -88,27 +91,10 @@ public class MapActivity extends FragmentActivity implements
             home = mLatLng;
         }
 
-        // create map
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    // called when map is ready for use
-    public void onMapReady(GoogleMap map) {
-        myMap=map;
-        myMap.setOnMarkerDragListener(this);
-        placeMarkers();
-    }
-
-    // place markers for work and home, as well
-    // as zoom camera appropriately
-    public void placeMarkers(){
+        // convert textual address to gps coordinates.
+        // here we convert string addresses to GPS coordinates
         try {
-            // here we convert string addresses to GPS coordinates
             Geocoder geocoder = new Geocoder(this);
-            System.out.println("Home: " + homeAddress );
-            System.out.println("Work: " + workAddress);
             List<Address> homeAddresses = geocoder.getFromLocationName(homeAddress, 1);
             List<Address> workAddresses = geocoder.getFromLocationName(workAddress, 1);
             if (!homeAddresses.isEmpty()) {
@@ -119,6 +105,28 @@ public class MapActivity extends FragmentActivity implements
                 Address workAd = workAddresses.get(0);
                 work = new LatLng(workAd.getLatitude(), workAd.getLongitude());
             }
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        // place markers for home and work
+
+        // create map
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    // called when map is ready for use
+    public void onMapReady(GoogleMap map) {
+        myMap = map;
+        myMap.setOnMarkerDragListener(this);
+        placeMarkers();
+    }
+
+    // place markers for work and home, as well
+    // as zoom camera appropriately
+    public void placeMarkers() {
             // place markers for home and work
             myMap.addMarker(new MarkerOptions()
                     .position(home)
@@ -138,28 +146,23 @@ public class MapActivity extends FragmentActivity implements
                 public void onMapLoaded() {
                     // zoom to include both markers
                     LatLngBounds.Builder myBoundsBuilder = new LatLngBounds.Builder();
-                    myBoundsBuilder = myBoundsBuilder.include(home); myBoundsBuilder = myBoundsBuilder.include(work);
+                    myBoundsBuilder = myBoundsBuilder.include(home);
+                    myBoundsBuilder = myBoundsBuilder.include(work);
                     LatLngBounds myBounds = myBoundsBuilder.build();
-                    myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(myBounds,0));
+                    myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(myBounds, 0));
                     myMap.animateCamera(CameraUpdateFactory.zoomOut(), 1000, null);
                 }
             });
-        }
-        catch(Exception e) {
-            // poor exception handling
-            System.out.println("caought!");
-            System.out.println(e.getMessage());
-        }
+
+        new ConfigureRoute().execute(home, work);
     }
 
     @Override
     public void onMarkerDragStart(Marker marker) {
-
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
-
     }
 
     @Override
@@ -170,53 +173,70 @@ public class MapActivity extends FragmentActivity implements
         LatLng location = marker.getPosition();
         if (0 == marker.getTitle().compareTo("Work")) {
             work = location;
-        }
-        else if (0 == marker.getTitle().compareTo("Home")) {
+        } else if (0 == marker.getTitle().compareTo("Home")) {
             home = location;
         }
 
-
-        String url = "https://maps.googleapis.com/maps/api/directions/json?";
-        url = url + "origin=" + home.latitude + "," + home.longitude;
-        url = url + "&destination=" + work.latitude + "," + work.longitude;
-        url = url + "&key=" + BROWSER_API_KEY;
-        System.out.println(url);
-        routeJSON = getJSON(url, 100000);
-        System.out.println(routeJSON);
+        new ConfigureRoute().execute(home, work);
     }
-    private String getJSON(String url, int timeout) {
-        try {
-            URL u = new URL(url);
-            HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
-            c.setRequestMethod("GET");
-            c.setRequestProperty("Content-length", "0");
-            c.setUseCaches(false);
-            c.setAllowUserInteraction(false);
-            c.setConnectTimeout(timeout);
-            c.setReadTimeout(timeout);
-            c.connect();
-            int status = c.getResponseCode();
 
-            switch (status) {
-                case 200:
-                case 201:
-                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line+"\n");
-                    }
-                    br.close();
-                    return sb.toString();
-            }
+    // We need to use a separate thread for the tasks of getting a route object from
+    // google, as well as using geocoding to convert text to gps.
+    //      http://developer.android.com/reference/android/os/AsyncTask.html
+    private class ConfigureRoute extends AsyncTask<LatLng, Void, String> {
+        protected String doInBackground(LatLng... endpoints) {
 
-        } catch (MalformedURLException ex) {
-            System.out.println("MalformedURLException in HTML request");
-            //Logger.getLogger(DebugServer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            System.out.println("IOException in HTML request");
-            //Logger.getLogger(DebugServer.class.getName()).log(Level.SEVERE, null, ex);
+
+            String url = "https://maps.googleapis.com/maps/api/directions/json?";
+            url = url + "origin=" + home.latitude + "," + home.longitude;
+            url = url + "&destination=" + work.latitude + "," + work.longitude;
+            url = url + "&key=" + BROWSER_API_KEY;
+            // Get JSON route object as String
+            routeJSON = getJSON(url, 100000);
+            System.out.println(routeJSON);
+            return routeJSON;
         }
-        return null;
+
+        protected void onProgressUpdate() {
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        // Standard parsing of JSON url request into a String
+        // http://stackoverflow.com/questions/10500775/parse-json-from-httpurlconnection-object
+        private String getJSON(String url, int timeout) {
+            try {
+                URL u = new URL(url);
+                HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
+                c.setRequestMethod("GET");
+                c.setRequestProperty("Content-length", "0");
+                c.setUseCaches(false);
+                c.setAllowUserInteraction(false);
+                c.setConnectTimeout(timeout);
+                c.setReadTimeout(timeout);
+                c.connect();
+                int status = c.getResponseCode();
+
+                switch (status) {
+                    case 200:
+                    case 201:
+                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line + "\n");
+                        }
+                        br.close();
+                        return sb.toString();
+                }
+
+            } catch (MalformedURLException ex) {
+                System.out.println("MalformedURLException in HTML request");
+            } catch (IOException ex) {
+                System.out.println("IOException in HTML request");
+            }
+            return null;
+        }
     }
 }
