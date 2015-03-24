@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,6 +42,7 @@ import javax.net.ssl.HttpsURLConnection;
 //      http://developer.android.com/reference/android/os/AsyncTask.html
 // - draw route on map and have user manipulate route,
 //     http://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
+//     http://ddewaele.github.io/GoogleMapsV2WithActionBarSherlock/part5
 
 public class MapActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -51,11 +53,18 @@ public class MapActivity extends FragmentActivity implements
     private MapFragment mapFragment;
     private GoogleMap myMap;
     private LatLng mLatLng; // current location
+
+//    static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
+//    static final JsonFactory JSON_FACTORY = new JacksonFactory();
+
     private String workAddress; // end address as string
     private String homeAddress; // start address as string
     private LatLng home; // GPS of home
     private LatLng work; // GPS of work
+    private Marker startMarker;
+    private Marker endMarker;
 
+    private List<LatLng> routePoly; // GPS coordinates to draw.
     private String routeJSON;
 
     @Override
@@ -122,17 +131,18 @@ public class MapActivity extends FragmentActivity implements
         myMap = map;
         myMap.setOnMarkerDragListener(this);
         placeMarkers();
+        new ConfigureRoute().execute(home, work);
     }
 
     // place markers for work and home, as well
     // as zoom camera appropriately
     public void placeMarkers() {
             // place markers for home and work
-            myMap.addMarker(new MarkerOptions()
+            startMarker = myMap.addMarker(new MarkerOptions()
                     .position(home)
                     .draggable(true)
                     .title("Home"));
-            myMap.addMarker(new MarkerOptions()
+            endMarker = myMap.addMarker(new MarkerOptions()
                     .position(work)
                     .draggable(true)
                     .title("Work"));
@@ -153,8 +163,6 @@ public class MapActivity extends FragmentActivity implements
                     myMap.animateCamera(CameraUpdateFactory.zoomOut(), 1000, null);
                 }
             });
-
-        new ConfigureRoute().execute(home, work);
     }
 
     @Override
@@ -194,13 +202,16 @@ public class MapActivity extends FragmentActivity implements
             // Get JSON route object as String
             routeJSON = getJSON(url, 100000);
             System.out.println(routeJSON);
+//            routePoly = decodePoly(routeJSON);
             return routeJSON;
         }
-
-        protected void onProgressUpdate() {
-        }
-
+        // Runs on UI thread after completion of doInBackground.
+        // Result is the return value of doInBackground.
         protected void onPostExecute(String result) {
+//            home = routePoly.get(0);
+//            work = routePoly.get(routePoly.size()-1);
+//            startMarker.setPosition(home);
+//            endMarker.setPosition(work);
         }
 
         // Standard parsing of JSON url request into a String
@@ -237,6 +248,40 @@ public class MapActivity extends FragmentActivity implements
                 System.out.println("IOException in HTML request");
             }
             return null;
+        }
+
+        // Get polyline object from JSON object.
+        private List<LatLng> decodePoly(String encoded) {
+
+            List<LatLng> poly = new ArrayList<LatLng>();
+            int index = 0, len = encoded.length();
+            int lat = 0, lng = 0;
+
+            while (index < len) {
+                int b, shift = 0, result = 0;
+                do {
+                    b = encoded.charAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lat += dlat;
+
+                shift = 0;
+                result = 0;
+                do {
+                    b = encoded.charAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lng += dlng;
+
+                LatLng p = new LatLng((((double) lat / 1E5)),
+                        (((double) lng / 1E5)));
+                poly.add(p);
+            }
+            return poly;
         }
     }
 }
