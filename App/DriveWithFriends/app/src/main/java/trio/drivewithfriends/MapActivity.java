@@ -75,7 +75,6 @@ public class MapActivity extends FragmentActivity implements
         Resources res = getResources();
         BROWSER_API_KEY = res.getString(R.string.browser_api_key);
         ANDROID_API_KEY = res.getString(R.string.android_api_key);
-
         // give proper permissions
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
