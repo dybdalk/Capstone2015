@@ -1,7 +1,8 @@
 import java.util.*;
 import java.io.*;
+//import javax.json;
 
-class RouteMatcher
+public class RouteMatcher
 {
 	//Test out some different matching algorithms based on different input data
 	public static void main(String[] args)
@@ -25,6 +26,11 @@ class RouteMatcher
 			//System.out.println("----------------------------");
 		}
 
+
+	}
+
+	private static void jsonParser()
+	{
 
 	}
 
@@ -100,7 +106,7 @@ class RouteMatcher
 		double deLon = Math.toRadians(m.elong - n.elong);
 		Double nelat = Math.toRadians(n.getelat());
 		Double melat = Math.toRadians(m.getelat());
-		double b = Math.sin(dsLat / 2) * Math.sin(deLat / 2) + Math.sin(deLon / 2) * Math.sin(deLon / 2) * Math.cos(nelat) * Math.cos(melat);
+		double b = Math.sin(deLat / 2) * Math.sin(deLat / 2) + Math.sin(deLon / 2) * Math.sin(deLon / 2) * Math.cos(nelat) * Math.cos(melat);
 		double d = 2 * Math.asin(Math.sqrt(b));
 
 		return R*d;

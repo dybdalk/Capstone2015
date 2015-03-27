@@ -2,7 +2,7 @@ Presentation Notes
 
 Core Idea:
 
- A carpooling app instead of a 'ride-sharing' or 'ride-finding' app. The goal is to match users who take similar routes at similar times of day so that they can commute together consistently. There will be some similarities between this and apps like Uber or Lyft in the sense that users will be able to rate one-another. Furthermore, we are hoping to implement a way for users to message on the app before actually driving together. 
+A carpooling app instead of a 'ride-sharing' or 'ride-finding' app. The goal is to match users who take similar routes at similar times of day so that they can commute together consistently. There will be some similarities between this and apps like Uber or Lyft in the sense that users will be able to rate one-another. Furthermore, we are hoping to implement a way for users to message on the app before actually driving together. 
 
 
 Major Components:
@@ -14,4 +14,4 @@ Major Components:
 
 Why we're doing it:
  
- While ride-sharing apps already exist, this idea is far more focused on helping people find a way to conserve energy and think more sustainably. It also doesn't require explicit payment and we believe that splitting the cost of gas evenly among the people who carpool will be less expensive for users than using other apps like Uber and Lyft to find rides.
+While ride-sharing apps already exist, this idea is far more focused on helping people find a way to conserve energy and think more sustainably. It also doesn't require explicit payment and we believe that splitting the cost of gas evenly among the people who carpool will be less expensive for users than using other apps like Uber and Lyft to find rides.

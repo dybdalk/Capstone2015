@@ -88,6 +88,8 @@ public class MainActivity extends ActionBarActivity implements
                 .addApi(LocationServices.API)
                 .build();
     }
+/*
+<<<<<<< HEAD
     // when google api client connects
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -95,6 +97,14 @@ public class MainActivity extends ActionBarActivity implements
 
         my_location = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         updateUI();
+=======
+*/
+    // when Google api client connects
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        my_location = new LatLng(0.0,0.0);
+        //updateUI();
     }
 
     // What we do with buttons:
