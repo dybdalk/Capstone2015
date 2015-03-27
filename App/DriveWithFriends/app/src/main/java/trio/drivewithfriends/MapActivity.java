@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.simple.JSONValue;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -53,9 +55,6 @@ public class MapActivity extends FragmentActivity implements
     private MapFragment mapFragment;
     private GoogleMap myMap;
     private LatLng mLatLng; // current location
-
-//    static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
-//    static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
     private String workAddress; // end address as string
     private String homeAddress; // start address as string
@@ -203,6 +202,8 @@ public class MapActivity extends FragmentActivity implements
             routeJSON = getJSON(url, 100000);
             System.out.println(routeJSON);
 //            routePoly = decodePoly(routeJSON);
+            Object obj = JSONValue.parse(routeJSON);
+
             return routeJSON;
         }
         // Runs on UI thread after completion of doInBackground.
