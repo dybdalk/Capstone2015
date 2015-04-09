@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.example.dshurbert.myapplication"
+        minSdkVersion 15
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+repositories {
+    maven {
+        url "http://developer.skobbler.com/maven/"
+    }
+}
+
+configurations {
+    drivers
+}
+dependencies {
+    drivers "com.skobbler.ngx:SKMaps:2.4.0"
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile files('libs/SKMaps.jar')
+}
+
+def assetsPath = "$projectDir/src/main/assets"
+def libsPath = "$projectDir/libs"
+def jniLibsPath = "$projectDir/src/main/jniLibs"
+
+task installSKMaps << {
+    copy {
+        from configurations.drivers
+        into "$buildDir/drivers-down"
+        rename { String fileName -> 'payload.zip' }
+    }
+    copy {
+        from zipTree("$buildDir/drivers-down/payload.zip")
+        into "$buildDir/drivers-down"
+    }
+    delete("$jniLibsPath",
+            "$assetsPath/SKMaps.zip",
+            "$libsPath/SKMaps.jar")
+    copy {
+        from "${buildDir}/drivers-down/jniLibs"
+        into "$jniLibsPath"
+    }
+    copy {
+        from "${buildDir}/drivers-down/SKMaps.zip"
+        into "$assetsPath"
+    }
+    copy {
+        from "${buildDir}/drivers-down/SKMaps.jar"
+        into "$libsPath"
+    }
+    delete("$buildDir/drivers-down")
+}
+
