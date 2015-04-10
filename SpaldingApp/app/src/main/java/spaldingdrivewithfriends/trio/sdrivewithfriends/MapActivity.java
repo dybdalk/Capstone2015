@@ -5,13 +5,26 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.skobbler.ngx.map.SKMapSurfaceView;
+import com.skobbler.ngx.map.SKMapViewHolder;
+
 
 public class MapActivity extends ActionBarActivity {
+
+    /**
+     * Surface view for displaying the map
+     */
+    private SKMapSurfaceView mapView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        SKMapViewHolder mapHolder = (SKMapViewHolder)
+                findViewById(R.id.view_group_map);
+        mapView = mapHolder.getMapSurfaceView();
     }
 
 
@@ -36,4 +49,44 @@ public class MapActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //We need this code to work:
+    /*public class MapActivity extends Activity implements SKMapSurfaceListener {
+
+        *//**
+         * Surface view for displaying the map
+         *//*
+        private SKMapSurfaceView mapView;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_map);
+            SKMapViewHolder mapHolder = (SKMapViewHolder)
+                    findViewById(R.id.view_group_map);
+            mapView = mapHolder.getMapSurfaceView();
+
+        }
+
+        @Override
+        protected void onPause() {
+            super.onPause();
+            mapView.onPause();
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+            mapView.onResume();
+        }
+
+        ...
+
+        @Override
+        public void onSurfaceCreated() {
+            //insert your code here
+        }
+
+    }
+   }*/
 }
