@@ -1,6 +1,9 @@
 package spaldingdrivewithfriends.trio.sdrivewithfriends;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +14,14 @@ import android.widget.Toast;
 
 import com.skobbler.ngx.SKPrepareMapTextureThread;
 import com.skobbler.ngx.SKPrepareMapTextureListener;
+import com.skobbler.ngx.util.SKLogging;
 import com.skobbler.ngx.versioning.SKMapUpdateListener;
 import com.skobbler.ngx.versioning.SKVersioningManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Created by chris spalding on 4/7/15.
@@ -26,29 +32,22 @@ public class SplashActivity extends Activity implements SKPrepareMapTextureListe
 {
     /**
      * Path to the MapResources directory
-     * NOTE: From Android demo
+     * NOTE: From Android demo, not quite sure how to use yet.
      */
     public static String mapResourcesDirPath = "";
+    private static final String TAG = "SplashActivity";
+    public static final long KILO = 1024;
+    public static final long MEGA = KILO * KILO;
 
 
     protected void onCreate(Bundle savedInstanceState)
     {
-        if (!new File(mapResourcesDirPath).exists()) {
-            // if map resources are not already present copy them to
-            // mapResourcesDirPath in the following thread
-            new SKPrepareMapTextureThread(this, mapResourcesDirPath, "SKMaps.zip", this).start();
-            // copy some other resource needed
-            copyOtherResources();
-            //prepareMapCreatorFile();
-        } else {
-            // map resources have already been copied - start the map activity
-            Toast.makeText(SplashActivity.this, "Map resources copied in a previous run", Toast.LENGTH_SHORT).show();
-            //prepareMapCreatorFile();
-            //DemoUtils.initializeLibrary(this);
-            SKVersioningManager.getInstance().setMapUpdateListener(this);
-            finish();
-            startActivity(new Intent(this, MapActivity.class));
-        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+        //~~~~We need to make the following thread:~~~~~
+        final SKPrepareMapTextureThread prepThread;
+        prepThread = new SKPrepareMapTextureThread(this, mapResourcesDirPath, "SKMaps.zip", this);
+        prepThread.start();
     }
 
     @Override
@@ -105,6 +104,70 @@ public class SplashActivity extends Activity implements SKPrepareMapTextureListe
         }.start();
     }
 
+    /*This is how we make the mapResourcesDirPath, I think.
+     *
+     */
+    public static String chooseStoragePath(Context context) {
+        if (getAvailableMemorySize(Environment.getDataDirectory().getPath()) >= 50 * MEGA) {
+            if (context != null && context.getFilesDir() != null) {
+                return context.getFilesDir().getPath();
+            }
+        } else {
+            if ((context != null) && (context.getExternalFilesDir(null) != null)) {
+                if (getAvailableMemorySize(context.getExternalFilesDir(null).toString()) >= 50 * MEGA) {
+                    return context.getExternalFilesDir(null).toString();
+                }
+            }
+        }
+        SKLogging.writeLog(TAG, "There is not enough memory on any storage, but return internal memory",
+                SKLogging.LOG_DEBUG);
 
-    //TODO make a copyOtherResources method as well as a DemoUtils class for our purposes.
+        if (context != null && context.getFilesDir() != null) {
+            return context.getFilesDir().getPath();
+        } else {
+            if ((context != null) && (context.getExternalFilesDir(null) != null)) {
+                return context.getExternalFilesDir(null).toString();
+            } else {
+                return null;
+            }
+        }
+    }
+
+        /**
+         * get the available internal memory size
+         * @return available memory size in bytes
+         */
+    public static long getAvailableMemorySize(String path) {
+        StatFs statFs = null;
+        try {
+            statFs = new StatFs(path);
+        } catch (IllegalArgumentException ex) {
+            SKLogging.writeLog("SplashActivity", "Exception when creating StatF ; message = " + ex,
+                    SKLogging.LOG_DEBUG);
+        }
+        if (statFs != null) {
+            Method getAvailableBytesMethod = null;
+            try {
+                getAvailableBytesMethod = statFs.getClass().getMethod("getAvailableBytes");
+            } catch (NoSuchMethodException e) {
+                SKLogging.writeLog(TAG, "Exception at getAvailableMemorySize method = " + e.getMessage(),
+                        SKLogging.LOG_DEBUG);
+            }
+
+            if (getAvailableBytesMethod != null) {
+                try {
+                    SKLogging.writeLog(TAG, "Using new API for getAvailableMemorySize method !!!", SKLogging.LOG_DEBUG);
+                    return (Long) getAvailableBytesMethod.invoke(statFs);
+                } catch (IllegalAccessException e) {
+                    return (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
+                } catch (InvocationTargetException e) {
+                    return (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
+                }
+            } else {
+                return (long) statFs.getAvailableBlocks() * (long) statFs.getBlockSize();
+            }
+        } else {
+            return 0;
+        }
+    }
 }
