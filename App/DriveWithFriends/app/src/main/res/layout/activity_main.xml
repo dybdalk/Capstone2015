@@ -34,15 +34,6 @@
         android:text="@string/to_route"
         android:nestedScrollingEnabled="true"
         android:onClick="buttonToRouteTouch" />
-    <Button
-        android:id="@+id/to_map_button"
-        android:layout_below="@id/to_route_button"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/to_map"
-        android:nestedScrollingEnabled="true"
-        android:onClick="buttonToMapTouch" />
     <TextView android:text="location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
