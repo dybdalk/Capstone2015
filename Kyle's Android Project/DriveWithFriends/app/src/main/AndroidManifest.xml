@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.kyle.drivewithfriends" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/CustomActionBarTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TrackRoute"
+            android:label="@string/title_activity_track_route" >
+        </activity>
+        <activity
+            android:name=".CompletedRoute"
+            android:label="@string/title_activity_completed_route" >
+        </activity>
+        <activity
+            android:name=".Tracking"
+            android:label="Tracking" >
+        </activity>
+        <activity
+            android:name=".MatchedRoutes"
+            android:label="@string/title_activity_matched_routes" >
+        </activity>
+    </application>
+
+</manifest>
