@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Success!"
+        android:gravity="center"
+        android:id="@+id/textView"
+        android:layout_weight="0.21"
+        android:textColor="@color/dark_green"
+        android:textStyle="bold"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Here are some folks with similar commutes:"
+        android:id="@+id/textView2"
+        android:layout_weight="0.21"
+        android:textSize="20dp"
+        android:paddingLeft="20dp" />
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/matchedExpandableListView" />
+</LinearLayout>
