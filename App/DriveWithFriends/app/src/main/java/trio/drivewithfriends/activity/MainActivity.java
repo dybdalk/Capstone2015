@@ -112,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements
     //
     // Start RouteActivity and send username as message
     public void buttonToRouteTouch(View view) {
-        Intent intent = new Intent(this, ApproveRouteActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);

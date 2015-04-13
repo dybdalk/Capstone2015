@@ -11,13 +11,14 @@ import trio.drivewithfriends.R;
 import trio.drivewithfriends.route.Route;
 import trio.drivewithfriends.route.Routing;
 import trio.drivewithfriends.route.RoutingListener;
-import com.google.android.gms.maps.CameraUpdate;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * https://github.com/jd-alexander/Google-Directions-Android
  */
 
-public class ApproveRouteActivity extends FragmentActivity implements RoutingListener
+public class MapActivity extends FragmentActivity implements RoutingListener, GoogleMap.OnMarkerDragListener
 {
     // id's for API keys
     private static String ANDROID_API_KEY;
@@ -49,7 +50,7 @@ public class ApproveRouteActivity extends FragmentActivity implements RoutingLis
     public void onCreate(Bundle savedInstanceState) {
         System.out.println("******************activity created at ExampleActivity");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example);
+        setContentView(R.layout.activity_map);
 
         // get route addresses
         Intent intent = getIntent();
@@ -130,32 +131,49 @@ public class ApproveRouteActivity extends FragmentActivity implements RoutingLis
         map.addPolyline(polyoptions);
         // Start marker
         MarkerOptions options = new MarkerOptions();
-        options.position(start);
+        options.position(route.getStartLocation());
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue));
+        options.title("Start");
         map.addMarker(options);
         // End marker
         options = new MarkerOptions();
-        options.position(end);
+        options.position(route.getEndLocation());
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
+        options.title("End");
         map.addMarker(options);
     }
 
     @Override
     public void onPause(){
-
+    super.onPause();
     }
 
     @Override
     public void onResume(){
-
+    super.onResume();
     }
 
     @Override
     public void onStart(){
-
+    super.onStart();
     }
     @Override
     public void onStop(){
+    super.onStop();
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
 
     }
 }

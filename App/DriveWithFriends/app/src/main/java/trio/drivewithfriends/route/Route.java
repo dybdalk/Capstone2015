@@ -177,5 +177,13 @@ public class Route {
 		this.latLgnBounds = builder.build();
 	}
 
+    public LatLng getStartLocation(){
+        return points.get(0);
+    }
+
+    public LatLng getEndLocation(){
+        return points.get(points.size()-1);
+    }
+
 }
 

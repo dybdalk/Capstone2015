@@ -69,7 +69,7 @@ public class OldMapActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_old_map);
         // set api keys
         Resources res = getResources();
         BROWSER_API_KEY = res.getString(R.string.browser_api_key);
