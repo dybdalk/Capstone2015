@@ -2,38 +2,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/trackroute"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
     <EditText
         android:id="@+id/edit_message"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_name" />
+        android:layout_height="70dp"
+        android:hint="@string/enter_name"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
     <EditText
         android:id="@+id/edit_start_location"
         android:layout_below="@id/edit_message"
         android:layout_centerVertical="true"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_start_address" />
+        android:layout_height="70dp"
+        android:hint="@string/enter_start_address"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
     <EditText
         android:id="@+id/edit_end_location"
-        android:layout_centerVertical="true"
-        android:layout_below="@id/edit_start_location"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_end_address" />
+        android:layout_height="70dp"
+        android:hint="@string/enter_end_address"
+        android:layout_below="@+id/edit_start_location"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
 
     <Button
         android:id="@+id/to_route_button"
         android:layout_width="wrap_content"
-        android:layout_below="@id/edit_end_location"
         android:layout_height="wrap_content"
         android:text="@string/to_route"
         android:nestedScrollingEnabled="true"
-        android:onClick="buttonToRouteTouch" />
+        android:onClick="buttonToRouteTouch"
+        android:layout_above="@+id/location"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:background="@color/cyan"
+        android:layout_marginBottom="20dp" />
     <TextView android:text="location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,4 +65,5 @@
         android:textSize="15dp"
         android:layout_centerHorizontal="true"
         android:textIsSelectable="true"  />
+
 </RelativeLayout>
