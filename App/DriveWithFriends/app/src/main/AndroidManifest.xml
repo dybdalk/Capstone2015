@@ -41,6 +41,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="trio.drivewithfriends.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:label="@string/title_activity_splash"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="trio.drivewithfriends.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
