@@ -1,2 +1,1 @@
-include ':app', ':draw-route'
-project(':draw-route').projectDir = new File('libs/draw-route')
+include ':app'

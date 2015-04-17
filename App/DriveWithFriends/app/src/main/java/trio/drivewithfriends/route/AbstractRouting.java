@@ -120,7 +120,6 @@ public abstract class AbstractRouting<T> extends AsyncTask<T, Void, trio.drivewi
             PolylineOptions mOptions = new PolylineOptions();
 
             for (LatLng point : result.getPoints()) {
-                System.out.println("******************  add point to polyline:");
                 if (point==null){
                     System.out.print("*null*");
                 }

@@ -23,7 +23,7 @@ public class Routing extends AbstractRouting<LatLng> {
             System.out.println("******************null points in Routing.java");
         }
         LatLng start = points[0];
-        LatLng dest = points[1];
+        LatLng dest = points[points.length-1];
         System.out.println("****************** start"+ points[0] + ", end" + points[1] + "in Routing.java");
         final StringBuffer mBuf = new StringBuffer(AbstractRouting.DIRECTIONS_API_URL);
         mBuf.append("origin=");
@@ -34,6 +34,18 @@ public class Routing extends AbstractRouting<LatLng> {
         mBuf.append(dest.latitude);
         mBuf.append(',');
         mBuf.append(dest.longitude);
+        if (points.length > 2){
+            mBuf.append("&waypoints=via:");
+            mBuf.append(points[1].latitude);
+            mBuf.append(',');
+            mBuf.append(points[1].longitude);
+            for (int i=2;i<points.length-1;i++){
+                mBuf.append("|via:");
+                mBuf.append(points[i].latitude);
+                mBuf.append(',');
+                mBuf.append(points[i].longitude);
+            }
+        }
         mBuf.append("&sensor=true&mode=");
         mBuf.append(_mTravelMode.getValue());
 

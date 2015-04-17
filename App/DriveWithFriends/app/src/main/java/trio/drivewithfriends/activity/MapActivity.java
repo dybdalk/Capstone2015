@@ -14,6 +14,8 @@ import trio.drivewithfriends.route.RoutingListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* This is the main map activity that the user sees to approve their route.
@@ -32,7 +35,13 @@ import java.util.List;
  * https://github.com/jd-alexander/Google-Directions-Android
  */
 
-public class MapActivity extends FragmentActivity implements RoutingListener, GoogleMap.OnMarkerDragListener
+public class MapActivity extends FragmentActivity implements
+        RoutingListener,
+        GoogleMap.OnMarkerDragListener,
+        OnMapReadyCallback,
+        GoogleMap.OnMapLoadedCallback,
+        GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnMapClickListener
 {
     // id's for API keys
     private static String ANDROID_API_KEY;
@@ -43,6 +52,8 @@ public class MapActivity extends FragmentActivity implements RoutingListener, Go
     private String startAddress; // start address as string
     protected LatLng start;     // start gps coordinates
     protected LatLng end;       // end gps coordinates
+
+    private ArrayList<LatLng> waypoints = new ArrayList<LatLng>();
     /**
      * This activity loads a map and then displays the route and pushpins on it.
      */
@@ -84,31 +95,10 @@ public class MapActivity extends FragmentActivity implements RoutingListener, Go
             System.out.println(e.getMessage());
         }
 
-        // get map view
-        SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        map = fm.getMap();
+        // get map object from fragment view.
+        MapFragment fm = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        fm.getMapAsync(this);
 
-        // when map resource is ready, zoom camera appropriately
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                // zoom to include both markers
-                LatLngBounds.Builder myBoundsBuilder = new LatLngBounds.Builder();
-                myBoundsBuilder = myBoundsBuilder.include(start);
-                myBoundsBuilder = myBoundsBuilder.include(end);
-                LatLngBounds myBounds = myBoundsBuilder.build();
-                map.moveCamera(CameraUpdateFactory.newLatLngBounds(myBounds, 0));
-                map.animateCamera(CameraUpdateFactory.zoomOut(), 1000, null);
-            }
-        });
-
-        // create and start a routing thread, which takes
-        // two gps coordinates as input and outputs a polyline as
-        // well as a route object.
-        Routing routing = new Routing(Routing.TravelMode.DRIVING);
-        routing.registerListener(this);
-        System.out.println("******************execute routing task in ExampleActivity.java");
-        routing.execute(start, end);
     }
     @Override
     public void onRoutingFailure() {
@@ -118,12 +108,13 @@ public class MapActivity extends FragmentActivity implements RoutingListener, Go
     @Override
     public void onRoutingStart() {
         System.out.println("******************routing start in ExampleActivity.java");
-// The Routing Request starts
+        // The Routing Request starts
     }
 
     @Override
     public void onRoutingSuccess(PolylineOptions mPolyOptions, Route route) {
         System.out.println("******************routing success in ExampleActivity.java");
+        map.clear();
         PolylineOptions polyoptions = new PolylineOptions();
         polyoptions.color(Color.BLUE);
         polyoptions.width(10);
@@ -132,15 +123,25 @@ public class MapActivity extends FragmentActivity implements RoutingListener, Go
         // Start marker
         MarkerOptions options = new MarkerOptions();
         options.position(route.getStartLocation());
+        options.draggable(true);
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue));
         options.title("Start");
         map.addMarker(options);
         // End marker
         options = new MarkerOptions();
         options.position(route.getEndLocation());
+        options.draggable(true);
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
         options.title("End");
         map.addMarker(options);
+
+        // zoom to include both markers
+        LatLngBounds.Builder myBoundsBuilder = new LatLngBounds.Builder();
+        myBoundsBuilder = myBoundsBuilder.include(start);
+        myBoundsBuilder = myBoundsBuilder.include(end);
+        LatLngBounds myBounds = myBoundsBuilder.build();
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(myBounds, 200));
+ //       map.moveCamera(CameraUpdateFactory.zoomOut());
     }
 
     @Override
@@ -174,6 +175,61 @@ public class MapActivity extends FragmentActivity implements RoutingListener, Go
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
+        System.out.println("end drag");
+        // updates route information when user drags
+        // markers.
+        LatLng location = marker.getPosition();
+        if (0 == marker.getTitle().compareTo("Start")) {
+            start = location;
+        } else if (0 == marker.getTitle().compareTo("End")) {
+            end = location;
+        }
+
+        Routing routing = new Routing(Routing.TravelMode.DRIVING);
+        routing.registerListener(this);
+        System.out.println("******************execute routing task in ExampleActivity.java");
+        routing.execute(start, end);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // when map resource is ready, set listeners for when map is loaded
+        // (i.e. visible), and for when markers are dragged.
+        map = googleMap;
+        map.setOnMarkerDragListener(this);
+        map.setOnMapLoadedCallback(this);
+        map.setOnMapLongClickListener(this);
+        map.setOnMapClickListener(this);
+    }
+
+    @Override
+    public void onMapLoaded() {
+        // create and start a routing thread, which takes
+        // two gps coordinates as input and outputs a polyline as
+        // well as a route object.
+        Routing routing = new Routing(Routing.TravelMode.DRIVING);
+        routing.registerListener(this);
+        System.out.println("******************execute routing task in ExampleActivity.java");
+        routing.execute(start, end);
+    }
+
+    @Override
+    public void onMapClick(LatLng point) {
+        waypoints.clear();
+        waypoints.add(point);
+        MarkerOptions options = new MarkerOptions();
+        options.position(point);
+        options.draggable(true);
+        options.title("Waypoint");
+        map.addMarker(options);
+        Routing routing = new Routing(Routing.TravelMode.DRIVING);
+        routing.registerListener(this);
+        System.out.println("******************execute routing task in ExampleActivity.java");
+        routing.execute(start, waypoints.get(0), end);
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
 
     }
 }
