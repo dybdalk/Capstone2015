@@ -17,5 +17,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_example">ExampleActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="facebook_app_id">614287292039107</string>
 
 </resources>
