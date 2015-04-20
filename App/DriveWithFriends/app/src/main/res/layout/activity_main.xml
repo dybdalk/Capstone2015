@@ -52,18 +52,11 @@
         android:text="@string/to_route"
         android:nestedScrollingEnabled="true"
         android:onClick="buttonToRouteTouch"
-        android:layout_above="@+id/location"
+        android:layout_below="@+id/edit_end_location"
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:background="@color/cyan"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp" />
-    <TextView android:text="location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/location"
-        android:layout_alignParentBottom="true"
-        android:textSize="15dp"
-        android:layout_centerHorizontal="true"
-        android:textIsSelectable="true"  />
 
 </RelativeLayout>

@@ -6,6 +6,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.EditText;
 
 import trio.passengr.R;
 import trio.passengr.route.Route;
@@ -214,7 +216,8 @@ public class MapActivity extends FragmentActivity implements
 
     @Override
     public void onMapClick(LatLng point) {
-        waypoints.clear();
+
+/*      waypoints.clear();
         waypoints.add(point);
         MarkerOptions options = new MarkerOptions();
         options.position(point);
@@ -224,11 +227,19 @@ public class MapActivity extends FragmentActivity implements
         Routing routing = new Routing(Routing.TravelMode.DRIVING);
         routing.registerListener(this);
         System.out.println("******************execute routing task in ExampleActivity.java");
-        routing.execute(start, waypoints.get(0), end);
+        routing.execute(start, waypoints.get(0), end);*/
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
 
     }
+
+    // Start MapActivity and send route and location
+    // information as messages.
+    public void buttonConfirmRouteTouch(View view) {
+        Intent intent = new Intent(this, ViewRoutesActivity.class);
+        startActivity(intent);
+    }
+
 }

@@ -15,15 +15,13 @@
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCu8SplK14jKZeXS3lMDjFOBqIFqP3D2D4" />
-
-
+            android:value="AIzaSyBTWvPTHiramkAyq1RfEvndWEsm3elstQ0" />
         <meta-data
             android:name="com.facebook.sdk.614287292039107"
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="trio.passengr.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,25 +30,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="trio.passengr.activity.OldMapActivity"
+            android:name=".activity.OldMapActivity"
             android:label="@string/title_activity_map"
-            android:parentActivityName="trio.passengr.activity.MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="trio.passengr.activity.MainActivity" />
         </activity>
         <activity
-            android:name="trio.passengr.activity.MapActivity"
+            android:name=".activity.MapActivity"
             android:label="@string/title_activity_example"
-            android:parentActivityName="trio.passengr.activity.MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="trio.passengr.activity.MainActivity" />
         </activity>
         <activity
-            android:name="trio.passengr.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/title_activity_splash"
-            android:parentActivityName="trio.passengr.activity.MainActivity" >
+            android:parentActivityName=".activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="trio.passengr.activity.MainActivity" />
@@ -59,17 +57,24 @@
         <!-- Adds the login functionality to our app -->
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- Allows our app to share pictures with facebook (so users can have profiles) -->
-        <provider android:authorities=
-            "com.facebook.app.FacebookContentProvider614287292039107"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider614287292039107"
             android:exported="true" />
 
+        <activity
+            android:name=".activity.ViewRoutesActivity"
+            android:label="@string/title_activity_view_routes"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="trio.passengr.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">DriveWithFriends</string>
-    <string name="android_api_key">AIzaSyCu8SplK14jKZeXS3lMDjFOBqIFqP3D2D4</string>
-    <string name="browser_api_key">AIzaSyCuaxh6R7omz4zHJ-j57CxawPiyZy55VAw</string>
+    <string name="app_name">Passengr</string>
+    <string name="android_api_key">AIzaSyBTWvPTHiramkAyq1RfEvndWEsm3elstQ0</string>
+    <string name="browser_api_key">AIzaSyD0nmp_WSMQFWYtQ9WddgFqteGmLki_DlQ</string>
+    <string name="facebook_app_id">614287292039107</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_route">RouteActivity</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_example">ExampleActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
     <string name="to_route">Approve Route</string>
     <string name="to_map">Add Route</string>
+    <string name="confirm_route">Confirm Route</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_start_address">Start Address</string>
     <string name="enter_end_address">End Address</string>
     <string name="username">username</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_example">ExampleActivity</string>
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="facebook_app_id">614287292039107</string>
+    <string name="title_activity_view_routes">ViewRoutesActivity</string>
 
 </resources>
