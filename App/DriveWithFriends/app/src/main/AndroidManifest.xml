@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="trio.drivewithfriends" >
+    package="trio.passengr" >
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -23,7 +23,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name="trio.passengr.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,28 +32,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.OldMapActivity"
+            android:name="trio.passengr.activity.OldMapActivity"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".activity.MainActivity" >
+            android:parentActivityName="trio.passengr.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value="trio.passengr.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.MapActivity"
+            android:name="trio.passengr.activity.MapActivity"
             android:label="@string/title_activity_example"
-            android:parentActivityName=".activity.MainActivity" >
+            android:parentActivityName="trio.passengr.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="trio.drivewithfriends.activity.MainActivity" />
+                android:value="trio.passengr.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="trio.passengr.activity.SplashActivity"
             android:label="@string/title_activity_splash"
-            android:parentActivityName=".activity.MainActivity" >
+            android:parentActivityName="trio.passengr.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="trio.drivewithfriends.activity.MainActivity" />
+                android:value="trio.passengr.activity.MainActivity" />
         </activity>
 
         <!-- Adds the login functionality to our app -->

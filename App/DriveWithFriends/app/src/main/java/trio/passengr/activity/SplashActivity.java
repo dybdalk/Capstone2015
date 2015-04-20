@@ -1,13 +1,10 @@
-package trio.drivewithfriends.activity;
+package trio.passengr.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,9 +12,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
-import trio.drivewithfriends.R;
+import trio.passengr.R;
 
 
 public class SplashActivity extends ActionBarActivity {

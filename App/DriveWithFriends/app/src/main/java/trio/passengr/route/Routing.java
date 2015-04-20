@@ -1,10 +1,6 @@
-package trio.drivewithfriends.route;
-
-import android.content.res.Resources;
+package trio.passengr.route;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import trio.drivewithfriends.R;
 
 /**
  * Async Task to access the Google Direction API and return the routing data.

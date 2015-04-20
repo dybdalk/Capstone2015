@@ -1,4 +1,4 @@
-package trio.drivewithfriends.activity;
+package trio.passengr.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,16 +7,15 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import trio.drivewithfriends.R;
-import trio.drivewithfriends.route.Route;
-import trio.drivewithfriends.route.Routing;
-import trio.drivewithfriends.route.RoutingListener;
+import trio.passengr.R;
+import trio.passengr.route.Route;
+import trio.passengr.route.Routing;
+import trio.passengr.route.RoutingListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -29,7 +28,7 @@ import java.util.List;
 
 /* This is the main map activity that the user sees to approve their route.
  *
- * Route requests and parsing is done in the trio.drivewithfriends.route package,
+ * Route requests and parsing is done in the trio.passengr.route package,
  * the code for which was taken from
  *
  * https://github.com/jd-alexander/Google-Directions-Android
