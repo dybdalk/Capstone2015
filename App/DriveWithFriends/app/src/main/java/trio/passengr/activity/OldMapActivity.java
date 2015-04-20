@@ -1,4 +1,4 @@
-package trio.drivewithfriends.activity;
+package trio.passengr.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import trio.drivewithfriends.R;
+import trio.passengr.R;
 
 // OLDMAPACTIVITY is not in use and is kept simply as a reference.
 //

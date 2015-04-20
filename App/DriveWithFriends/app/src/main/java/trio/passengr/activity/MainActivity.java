@@ -1,4 +1,4 @@
-package trio.drivewithfriends.activity;
+package trio.passengr.activity;
 
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.DateFormat;
 import java.util.Date;
 
-import trio.drivewithfriends.R;
+import trio.passengr.R;
 
 public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.
@@ -31,17 +31,17 @@ public class MainActivity extends ActionBarActivity implements
     // and passed to the next activity.
 
     // EXTRA_MESSAGE is used to pass the username to RouteActivity
-    public final static String EXTRA_MESSAGE = "trio.drivewithfriends.MESSAGE";
+    public final static String EXTRA_MESSAGE = "trio.passengr.MESSAGE";
 
     // MY_LAT and MY_LNG pass current location to MapActivity
-    public final static String MY_LAT = "trio.drivewithfriends.MY_LAT";
-    public final static String MY_LNG = "trio.drivewithfriends.MY_LNG";
+    public final static String MY_LAT = "trio.passengr.MY_LAT";
+    public final static String MY_LNG = "trio.passengr.MY_LNG";
 
     // Pass start and end location to MapActivity. The user inputs these locations
     // as addresses and we use Geocoding to get GPS coordinates. Addresses can be
     // literal address or just names, i,e, "Tacoma, Wa".
-    public final static String START_LOCATION = "trio.drivewithfriends.START_LOCATION";
-    public final static String END_LOCATION = "trio.drivewithfriends.END_LOCATION";
+    public final static String START_LOCATION = "trio.passengr.START_LOCATION";
+    public final static String END_LOCATION = "trio.passengr.END_LOCATION";
 
     // Current Location
     private Location mLastLocation;

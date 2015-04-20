@@ -1,4 +1,4 @@
-package trio.drivewithfriends.route;
+package trio.passengr.route;
 
 /**
  * Async Task to access the Google Direction API and return the routing data
@@ -21,8 +21,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 
-public abstract class AbstractRouting<T> extends AsyncTask<T, Void, trio.drivewithfriends.route.Route> {
-    protected ArrayList<trio.drivewithfriends.route.RoutingListener> _aListeners;
+public abstract class AbstractRouting<T> extends AsyncTask<T, Void, trio.passengr.route.Route> {
+    protected ArrayList<trio.passengr.route.RoutingListener> _aListeners;
     protected TravelMode _mTravelMode;
 
     protected static final String DIRECTIONS_API_URL = "https://maps.googleapis.com/maps/api/directions/json?";
