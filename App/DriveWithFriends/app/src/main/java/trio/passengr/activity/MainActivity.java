@@ -63,10 +63,6 @@ public class MainActivity extends ActionBarActivity implements
 
         Parse.initialize(this, "T1TTXPJcPzM830GZeCBIupyVU1cMT4tiqByRVFVt", "akwdXIApXkPOGA50FmcbBnWmFCEGatusbOJ1CQnr");
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
-
         buildGoogleApiClient();
     }
 

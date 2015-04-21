@@ -48,6 +48,13 @@ public class MapActivity extends FragmentActivity implements
     private static String ANDROID_API_KEY;
     private static String BROWSER_API_KEY;
 
+    // START and END pass current location to MapActivity
+    public final static String START_LAT = "trio.passengr.START_LAT";
+    public final static String START_LNG = "trio.passengr.START_LNG";
+    public final static String END_LAT = "trio.passengr.END_LAT";
+    public final static String END_LNG = "trio.passengr.END_LNG";
+
+
     protected GoogleMap map;
     private String endAddress; // end address as string
     private String startAddress; // start address as string
@@ -238,7 +245,18 @@ public class MapActivity extends FragmentActivity implements
     // Start MapActivity and send route and location
     // information as messages.
     public void buttonConfirmRouteTouch(View view) {
-        Intent intent = new Intent(this, ViewRoutesActivity.class);
+        Intent intent = new Intent(this, AddTimeInfoActivity.class);
+
+        String startLat = Double.toString(start.latitude);
+        String startLng = Double.toString(start.longitude);
+        String endLat = Double.toString(end.latitude);
+        String endLng = Double.toString(end.longitude);
+
+        intent.putExtra(START_LAT, startLat);
+        intent.putExtra(START_LNG, startLng);
+        intent.putExtra(END_LAT, endLat);
+        intent.putExtra(END_LNG, endLng);
+
         startActivity(intent);
     }
 
