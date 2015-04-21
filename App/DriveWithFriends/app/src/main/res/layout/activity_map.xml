@@ -12,13 +12,16 @@
 
     <Button
         android:id="@+id/confirm_route_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="@string/confirm_route"
         android:nestedScrollingEnabled="true"
         android:onClick="buttonConfirmRouteTouch"
-        android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:background="@color/cyan"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp" />
 </RelativeLayout>
