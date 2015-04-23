@@ -234,7 +234,8 @@ public class MapActivity extends FragmentActivity implements
         Routing routing = new Routing(Routing.TravelMode.DRIVING);
         routing.registerListener(this);
         System.out.println("******************execute routing task in ExampleActivity.java");
-        routing.execute(start, waypoints.get(0), end);*/
+        routing.execute(start, waypoints.get(0), end);
+*/
     }
 
     @Override

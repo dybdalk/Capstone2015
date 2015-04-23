@@ -12,6 +12,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import trio.passengr.R;
 
@@ -19,6 +20,7 @@ import trio.passengr.R;
 public class SplashActivity extends ActionBarActivity {
 
     private CallbackManager callbackManager;
+    private LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class SplashActivity extends ActionBarActivity {
         //make a callback manager and register the callback
         //(so it knows what to do when you click login, I think.
         callbackManager = CallbackManager.Factory.create();
-
+        loginButton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
