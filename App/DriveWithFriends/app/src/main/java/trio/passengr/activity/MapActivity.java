@@ -61,6 +61,8 @@ public class MapActivity extends FragmentActivity implements
     protected LatLng start;     // start gps coordinates
     protected LatLng end;       // end gps coordinates
 
+    private boolean attemptRouteAgain = true;
+
     private ArrayList<LatLng> waypoints = new ArrayList<LatLng>();
     /**
      * This activity loads a map and then displays the route and pushpins on it.
@@ -111,7 +113,10 @@ public class MapActivity extends FragmentActivity implements
     @Override
     public void onRoutingFailure() {
         System.out.println("******************routing failure in ExampleActivity.java");
+
         // The Routing request failed
+        // TODO zoom camera to current location onRoutingFailure.
+
     }
     @Override
     public void onRoutingStart() {

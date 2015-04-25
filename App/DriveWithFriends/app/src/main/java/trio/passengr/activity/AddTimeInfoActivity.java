@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.CheckedTextView;
 
 import java.util.Calendar;
 
@@ -47,17 +48,26 @@ public class AddTimeInfoActivity extends Activity {
         endLng = intent.getStringExtra(MapActivity.END_LNG);
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
-        time = (TextView) findViewById(R.id.timeView);
         calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
-        showTime(hour, min);
+    }
+
+    public void onDayChecked(View v) {
+        CheckedTextView checkable = (CheckedTextView) v;
+        if (!checkable.isChecked()) {
+            checkable.setCheckMarkDrawable(android.R.drawable.checkbox_on_background);
+        }
+        else {
+            checkable.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+        }
+        checkable.toggle();
     }
 
     public void saveTime(View view) {
         int hour = timePicker.getCurrentHour();
         int min = timePicker.getCurrentMinute();
-        Intent intent = new Intent(this, AddDateInfoActivity.class);
+        Intent intent = new Intent(this, ViewRoutesActivity.class);
 
         intent.putExtra(START_LAT, startLat);
         intent.putExtra(START_LNG, startLng);
@@ -68,25 +78,6 @@ public class AddTimeInfoActivity extends Activity {
 
         startActivity(intent);
     }
-
-
-    public void showTime(int hour, int min) {
-        if (hour == 0) {
-            hour += 12;
-            format = "AM";
-        } else if (hour == 12) {
-            format = "PM";
-        } else if (hour > 12) {
-            hour -= 12;
-            format = "PM";
-        } else {
-            format = "AM";
-        }
-        time.setText(new StringBuilder().append(hour).append(" : ").append(min)
-                .append(" ").append(format));
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

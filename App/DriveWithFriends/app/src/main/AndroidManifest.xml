@@ -84,14 +84,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="trio.passengr.activity.MapActivity" />
         </activity>
-        <activity
-            android:name=".activity.AddDateInfoActivity"
-            android:label="@string/title_activity_add_date_info"
-            android:parentActivityName=".activity.AddTimeInfoActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="trio.passengr.activity.AddTimeInfoActivity" />
-        </activity>
     </application>
 
 </manifest>
