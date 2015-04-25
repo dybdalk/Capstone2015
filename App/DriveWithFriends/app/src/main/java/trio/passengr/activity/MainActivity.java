@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Application;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,11 +59,6 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Enable Local Datastore for Parse.
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, "T1TTXPJcPzM830GZeCBIupyVU1cMT4tiqByRVFVt", "akwdXIApXkPOGA50FmcbBnWmFCEGatusbOJ1CQnr");
-
         buildGoogleApiClient();
     }
 
